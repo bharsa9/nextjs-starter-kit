@@ -1,18 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getBlogs } from '@/lib/api';
+import { Blog } from '@/utils/types';
 
 type BlogListProps = {
   userSpecific?: boolean;
   judgingQueue?: boolean;
 };
 
-const BlogList: React.FC<BlogListProps> = ({ userSpecific = false, judgingQueue = false }) => {
-  // TODO: Fetch blogs from backend based on props
-  const blogs = [
-    { id: '1', title: 'Sample Blog 1', category: 'Sports', subcategory: 'Football' },
-    { id: '2', title: 'Sample Blog 2', category: 'Politics', subcategory: 'International' },
-  ];
+const BlogList: React.FC<BlogListProps> = async ({ userSpecific = false, judgingQueue = false }) => {
+  const blogs: Blog[] = await getBlogs();
+
+  // TODO: Implement filtering based on userSpecific and judgingQueue props
 
   return (
     <div className="grid gap-4">
@@ -27,6 +27,9 @@ const BlogList: React.FC<BlogListProps> = ({ userSpecific = false, judgingQueue 
           </CardHeader>
           <CardContent>
             <p>{blog.category} &gt; {blog.subcategory}</p>
+            <div className="mt-2 text-sm text-gray-500">
+              Side 1 Score: {blog.side1_score} | Side 2 Score: {blog.side2_score}
+            </div>
           </CardContent>
         </Card>
       ))}
